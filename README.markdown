@@ -10,6 +10,11 @@
 - T Save(T pobject);
 - void Delete(T pobject);
 
+#Install nuget package
+```
+PM> Install-Package MongoDB-GenericDao
+```
+
 #How to use?
 Each class must have an inheritance from MongoDBGenericDao.MongoDBEntity class
 
@@ -58,7 +63,9 @@ public class BMessage : MongoDBGenericDao<Message>, IBMessage
 ```csharp
 IBMessage bmessage = new BMessage("[your connectionstring here. ex: server=appserver-db;database=mymongodbdatabasename]");
 
-var message = bmessage.AddNewMessage("mongodb@mongodb.com",new List<string>().Add("nononono@nonono.com"),"Message content nonononononononono");
+var message = bmessage.AddNewMessage(	"mongodb@mongodb.com",
+										new List<string>().Add("nononono@nonono.com"),
+										"Message content nonononononononono");
 var messageid = message.Id;
 
 
