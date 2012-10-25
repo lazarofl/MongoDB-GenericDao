@@ -47,5 +47,20 @@ namespace MongoDbGenericDao.Interfaces
         /// </summary>
         /// <param name="pobject">The pobject.</param>
         void Delete(T pobject);
+        /// <summary>
+        /// Counts the specified condition.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <returns></returns>
+        long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
+        /// <summary>
+        /// Paginates the specified func.
+        /// </summary>
+        /// <param name="func">The func.</param>
+        /// <param name="pagesize">The pagesize.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="pOrderByDescending">if set to <c>true</c> [p order by descending].</param>
+        /// <returns></returns>
+        IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending);
     }
 }
