@@ -41,7 +41,7 @@ public interface IBMessage : IDao<Message, string>
 
 public class BMessage : MongoDBGenericDao<Message>, IBMessage
 {
-    public BActivity(string mongodbconnectionstring) : base(mongodbconnectionstring) { }
+    public BMessage(string mongodbconnectionstring) : base(mongodbconnectionstring) { }
 
     public Message AddNewMessage(string from, List<string> to, string messagetext)
     {
