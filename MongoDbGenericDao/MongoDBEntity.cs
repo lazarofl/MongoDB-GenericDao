@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace MongoDbGenericDao
 {
-    public class MongoDBEntity
+    public abstract class MongoDBEntity
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

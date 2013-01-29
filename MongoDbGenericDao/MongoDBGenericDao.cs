@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MongoDbGenericDao
 {
-    public class MongoDBGenericDao<T> : Interfaces.IDao<T, string> where T : MongoDBEntity
+    public abstract class MongoDBGenericDao<T> : Interfaces.IDao<T, string> where T : MongoDBEntity
     {
         private MongoDatabase _repository;
 
@@ -29,7 +29,7 @@ namespace MongoDbGenericDao
         /// </summary>
         /// <param name="_id">The _id.</param>
         /// <returns></returns>
-        public T GetByID(string _id)
+        public virtual T GetByID(string _id)
         {
             return _repository.GetCollection<T>(collectioname).FindOne(Query.EQ("_id", new ObjectId(_id)));
         }
@@ -38,7 +38,7 @@ namespace MongoDbGenericDao
         /// Gets all.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _repository.GetCollection<T>(collectioname).FindAll();
         }
@@ -48,7 +48,7 @@ namespace MongoDbGenericDao
         /// </summary>
         /// <param name="condition">The condition.</param>
         /// <returns></returns>
-        public T GetByCondition(System.Linq.Expressions.Expression<Func<T, bool>> condition)
+        public virtual T GetByCondition(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
             return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).FirstOrDefault();
         }
@@ -58,7 +58,7 @@ namespace MongoDbGenericDao
         /// </summary>
         /// <param name="condition">The condition.</param>
         /// <returns></returns>
-        public IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition)
+        public virtual IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
             return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).ToList();
         }
@@ -70,7 +70,7 @@ namespace MongoDbGenericDao
         /// <param name="maxresult">The maxresult.</param>
         /// <param name="orderByDescending">if set to <c>true</c> [order by descending].</param>
         /// <returns></returns>
-        public IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition, int maxresult, bool orderByDescending = false)
+        public virtual IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition, int maxresult, bool orderByDescending = false)
         {
             var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition);
 
@@ -87,7 +87,7 @@ namespace MongoDbGenericDao
         /// </summary>
         /// <param name="pobject">The pobject.</param>
         /// <returns></returns>
-        public T Save(T pobject)
+        public virtual T Save(T pobject)
         {
             _repository.GetCollection<T>(collectioname).Save(pobject);
             return pobject;
@@ -97,7 +97,7 @@ namespace MongoDbGenericDao
         /// Deletes the specified pobject.
         /// </summary>
         /// <param name="pobject">The pobject.</param>
-        public void Delete(T pobject)
+        public virtual void Delete(T pobject)
         {
             _repository.GetCollection<T>(collectioname).Remove(Query.EQ("_id", new ObjectId(pobject.Id)));
         }
@@ -107,7 +107,7 @@ namespace MongoDbGenericDao
         /// </summary>
         /// <param name="condition">The condition.</param>
         /// <returns></returns>
-        public long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition)
+        public virtual long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
             return _repository.GetCollection<T>(collectioname).AsQueryable().LongCount();
         }
@@ -120,7 +120,7 @@ namespace MongoDbGenericDao
         /// <param name="page">The page.</param>
         /// <param name="pOrderByDescending">if set to <c>true</c> [order by descending].</param>
         /// <returns></returns>
-        public IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending = false)
+        public virtual IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending = false)
         {
             var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(func);
 
