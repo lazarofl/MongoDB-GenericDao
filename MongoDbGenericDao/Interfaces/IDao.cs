@@ -62,5 +62,10 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="condition">The condition.</param>
         /// <returns></returns>
         long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
+        /// <summary>
+        /// Count all elements
+        /// </summary>
+        /// <returns></returns>
+        long Count();
     }
 }

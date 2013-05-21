@@ -9,6 +9,7 @@
 - IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition, int maxresult, bool orderByDescending);
 - T Save(T pobject);
 - void Delete(T pobject);
+- long Count();
 - long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
 - IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending);
 

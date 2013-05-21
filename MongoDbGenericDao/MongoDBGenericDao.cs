@@ -109,20 +109,29 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
-            return _repository.GetCollection<T>(collectioname).AsQueryable().LongCount();
+            return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).LongCount();
+        }
+
+        /// <summary>
+        /// Count all elements
+        /// </summary>
+        /// <returns></returns>
+        public virtual long Count()
+        {
+            return _repository.GetCollection<T>(collectioname).Count();
         }
 
         /// <summary>
         /// Paginates by an specified condition.
         /// </summary>
-        /// <param name="func">The condition.</param>
+        /// <param name="condition">The condition.</param>
         /// <param name="pagesize">The pagesize.</param>
         /// <param name="page">The page.</param>
         /// <param name="pOrderByDescending">if set to <c>true</c> [order by descending].</param>
         /// <returns></returns>
-        public virtual IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending = false)
+        public virtual IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, bool pOrderByDescending = false)
         {
-            var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(func);
+            var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition);
 
             if (pOrderByDescending)
                 query.OrderByDescending(x => x.Id);
