@@ -11,7 +11,8 @@
 - void Delete(T pobject);
 - long Count();
 - long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
-- IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending);
+- IEnumerable<T> Paginate<TKey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
+- IEnumerable<T> Paginate<TKey>(int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
 
 #Install nuget package
 ```
@@ -76,4 +77,9 @@ var top50MessagesThatContainsHelloWordMessage = bmessage.GetAll(x=>x.Content.Con
 
 //remove the first message from top50MessagesThatContainsHelloWordMessage
 bmessage.Delete(top50MessagesThatContainsHelloWordMessage.First());
+
+
+//paginate first page based in date created order by descending
+var last10 = bmessage.Paginate(1,10,x=>x.DateCreated,true);
+
 ```

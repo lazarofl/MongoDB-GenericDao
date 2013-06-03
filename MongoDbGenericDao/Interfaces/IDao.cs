@@ -50,7 +50,15 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="page">The page.</param>
         /// <param name="pOrderByDescending">if set to <c>true</c> [p order by descending].</param>
         /// <returns></returns>
-        IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> func, int pagesize, int page, bool pOrderByDescending);
+        IEnumerable<T> Paginate<TKey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
+        /// <summary>
+        /// Paginates the specified func.
+        /// </summary>
+        /// <param name="pagesize">The pagesize.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="pOrderByDescending">if set to <c>true</c> [p order by descending].</param>
+        /// <returns></returns>
+        IEnumerable<T> Paginate<TKey>(int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
         /// <summary>
         /// Deletes the Entity.
         /// </summary>

@@ -127,9 +127,10 @@ namespace MongoDbGenericDao
         /// <param name="condition">The condition.</param>
         /// <param name="pagesize">The pagesize.</param>
         /// <param name="page">The page.</param>
+        /// <param name="pOrderByClause">The OrderBy Clause.</param>
         /// <param name="pOrderByDescending">if set to <c>true</c> [order by descending].</param>
         /// <returns></returns>
-        public virtual IEnumerable<T> Paginate(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, bool pOrderByDescending = false)
+        public virtual IEnumerable<T> Paginate<Tkey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
             var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition);
 
@@ -138,7 +139,34 @@ namespace MongoDbGenericDao
             else
                 query.OrderBy(x => x.Id);
 
-            return query.Skip(pagesize * (page - 1)).Take(pagesize);
+            if (pOrderByDescending)
+                return query.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return query.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+
+        }
+
+        /// <summary>
+        /// Paginates by an specified condition.
+        /// </summary>
+        /// <param name="pagesize">The pagesize.</param>
+        /// <param name="page">The page.</param>
+        /// <param name="pOrderByClause">The OrderBy Clause.</param>
+        /// <param name="pOrderByDescending">if set to <c>true</c> [order by descending].</param>
+        /// <returns></returns>
+        public virtual IEnumerable<T> Paginate<Tkey>(int pagesize, int page, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
+        {
+            var query = _repository.GetCollection<T>(collectioname).AsQueryable();
+
+            if (pOrderByDescending)
+                query.OrderByDescending(x => x.Id);
+            else
+                query.OrderBy(x => x.Id);
+
+            if (pOrderByDescending)
+                return query.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return query.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
         }
     }
 }
