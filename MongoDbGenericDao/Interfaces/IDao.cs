@@ -65,6 +65,11 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="pobject">The pobject.</param>
         void Delete(T pobject);
         /// <summary>
+        /// Deletes the Entities.
+        /// </summary>
+        /// <param name="pobject">The query condition.</param>
+        void Delete(System.Linq.Expressions.Expression<Func<T, bool>> condition);
+        /// <summary>
         /// Counts the specified condition.
         /// </summary>
         /// <param name="condition">The condition.</param>

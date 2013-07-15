@@ -103,6 +103,20 @@ namespace MongoDbGenericDao
         }
 
         /// <summary>
+        /// Deletes the specified pobject.
+        /// </summary>
+        /// <param name="pobject">The pobject.</param>
+        public virtual void Delete(System.Linq.Expressions.Expression<Func<T, bool>> condition)
+        {
+            var todelete = this.GetAll(condition) as List<T>;
+            if (todelete != null && todelete.Count > 0)
+            {
+                for (int i = 0; i < todelete.Count; i++)
+                    this.Delete(todelete[i]);
+            }
+        }
+
+        /// <summary>
         /// Counts the specified condition.
         /// </summary>
         /// <param name="condition">The condition.</param>
