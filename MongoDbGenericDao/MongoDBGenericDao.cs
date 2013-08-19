@@ -5,6 +5,8 @@ using MongoDB.Driver.Linq;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using System.Linq;
+using MongoDB.Bson.Serialization;
+using MongoDbGenericDao.Search;
 
 namespace MongoDbGenericDao
 {
@@ -12,7 +14,8 @@ namespace MongoDbGenericDao
     {
         private MongoDatabase _repository;
 
-        private readonly string collectioname = typeof(T).Name;
+        private readonly string _collectioname = typeof(T).Name;
+        private readonly string _language = "portuguese";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MongoDBGenericDao{T}" /> class.
@@ -31,7 +34,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual T GetByID(string _id)
         {
-            return _repository.GetCollection<T>(collectioname).FindOne(Query.EQ("_id", new ObjectId(_id)));
+            return _repository.GetCollection<T>(_collectioname).FindOne(Query.EQ("_id", new ObjectId(_id)));
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual IEnumerable<T> GetAll()
         {
-            return _repository.GetCollection<T>(collectioname).FindAll();
+            return _repository.GetCollection<T>(_collectioname).FindAll();
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual T GetByCondition(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
-            return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).FirstOrDefault();
+            return _repository.GetCollection<T>(_collectioname).AsQueryable().Where(condition).FirstOrDefault();
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
-            return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).ToList();
+            return _repository.GetCollection<T>(_collectioname).AsQueryable().Where(condition).ToList();
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>> condition, int maxresult, bool orderByDescending = false)
         {
-            var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition);
+            var query = _repository.GetCollection<T>(_collectioname).AsQueryable().Where(condition);
 
             if (orderByDescending)
                 query.OrderByDescending(x => x.Id);
@@ -89,7 +92,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual T Save(T pobject)
         {
-            _repository.GetCollection<T>(collectioname).Save(pobject);
+            _repository.GetCollection<T>(_collectioname).Save(pobject);
             return pobject;
         }
 
@@ -99,7 +102,7 @@ namespace MongoDbGenericDao
         /// <param name="pobject">The pobject.</param>
         public virtual void Delete(T pobject)
         {
-            _repository.GetCollection<T>(collectioname).Remove(Query.EQ("_id", new ObjectId(pobject.Id)));
+            _repository.GetCollection<T>(_collectioname).Remove(Query.EQ("_id", new ObjectId(pobject.Id)));
         }
 
         /// <summary>
@@ -123,7 +126,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition)
         {
-            return _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition).LongCount();
+            return _repository.GetCollection<T>(_collectioname).AsQueryable().Where(condition).LongCount();
         }
 
         /// <summary>
@@ -132,7 +135,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual long Count()
         {
-            return _repository.GetCollection<T>(collectioname).Count();
+            return _repository.GetCollection<T>(_collectioname).Count();
         }
 
         /// <summary>
@@ -146,7 +149,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual IEnumerable<T> Paginate<Tkey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
-            var query = _repository.GetCollection<T>(collectioname).AsQueryable().Where(condition);
+            var query = _repository.GetCollection<T>(_collectioname).AsQueryable().Where(condition);
 
             if (pOrderByDescending)
                 query.OrderByDescending(x => x.Id);
@@ -170,7 +173,7 @@ namespace MongoDbGenericDao
         /// <returns></returns>
         public virtual IEnumerable<T> Paginate<Tkey>(int pagesize, int page, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
-            var query = _repository.GetCollection<T>(collectioname).AsQueryable();
+            var query = _repository.GetCollection<T>(_collectioname).AsQueryable();
 
             if (pOrderByDescending)
                 query.OrderByDescending(x => x.Id);
@@ -181,6 +184,33 @@ namespace MongoDbGenericDao
                 return query.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
             else
                 return query.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+        }
+
+        /// <summary>
+        /// Search indexes
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="search">The search value</param>
+        /// <param name="limit">Limit size of results</param>
+        /// <param name="foundedRecords">total number of founded records in index</param>
+        /// <returns></returns>
+        public IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords)
+        {
+            var textSearchCommand = new CommandDocument
+             {
+                 { "language", _language },
+                 { "text", _collectioname },
+                 { "limit", page * pagesize },
+                 { "search", search }
+             };
+
+            var commandResult = _repository.RunCommandAs<TextSearchCommandResult<T>>(textSearchCommand);
+
+            foundedRecords = commandResult.Response["stats"]["nfound"].AsInt64;
+
+            return commandResult.Ok
+                ? commandResult.Results.OrderBy(t => t.score).Skip(pagesize * (page - 1)).Take(pagesize).Select(t => t.obj)
+                : null;
         }
     }
 }

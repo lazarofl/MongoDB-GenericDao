@@ -60,6 +60,15 @@ namespace MongoDbGenericDao.Interfaces
         /// <returns></returns>
         IEnumerable<T> Paginate<TKey>(int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
         /// <summary>
+        /// Seach using 'text' command
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="page"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="foundedRecords"></param>
+        /// <returns></returns>
+        IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords);
+        /// <summary>
         /// Deletes the Entity.
         /// </summary>
         /// <param name="pobject">The pobject.</param>
