@@ -13,8 +13,7 @@
 - long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
 - IEnumerable<T> Paginate<TKey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
 - IEnumerable<T> Paginate<TKey>(int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
-- IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords);
-
+- IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords, params string[] indexes);
 #Install nuget package
 ```
 PM> Install-Package MongoDB-GenericDao

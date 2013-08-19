@@ -194,8 +194,11 @@ namespace MongoDbGenericDao
         /// <param name="limit">Limit size of results</param>
         /// <param name="foundedRecords">total number of founded records in index</param>
         /// <returns></returns>
-        public IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords)
+        public IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords, params string[] indexes)
         {
+            if (indexes.Length > 0)
+                _repository.GetCollection<T>(_collectioname).EnsureIndex(indexes);
+
             var textSearchCommand = new CommandDocument
              {
                  { "language", _language },

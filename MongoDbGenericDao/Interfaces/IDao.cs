@@ -67,7 +67,7 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="pagesize"></param>
         /// <param name="foundedRecords"></param>
         /// <returns></returns>
-        IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords);
+        IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords, params string[] indexes);
         /// <summary>
         /// Deletes the Entity.
         /// </summary>
