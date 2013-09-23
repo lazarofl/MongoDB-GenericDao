@@ -27,6 +27,15 @@ namespace MongoDbGenericDao
             _repository = MongoServer.Create(conn).GetDatabase(conn.DatabaseName);
         }
 
+        public MongoDBGenericDao(string pConnectionstring, string username, string password)
+        {
+            var conn = new MongoConnectionStringBuilder(pConnectionstring);
+            conn.Username = username;
+            conn.Password = password;
+
+            _repository = MongoServer.Create(conn).GetDatabase(conn.DatabaseName);
+        }
+
         /// <summary>
         /// Gets the by ID.
         /// </summary>
@@ -199,12 +208,12 @@ namespace MongoDbGenericDao
             if (indexes.Length > 0)
                 _repository.GetCollection<T>(_collectioname).EnsureIndex(indexes);
 
-            var textSearchCommand = new CommandDocument
+            IMongoCommand textSearchCommand = new CommandDocument
              {
                  { "language", _language },
+                 { "search", search },
                  { "text", _collectioname },
-                 { "limit", page * pagesize },
-                 { "search", search }
+                 { "limit", page * pagesize }
              };
 
             var commandResult = _repository.RunCommandAs<TextSearchCommandResult<T>>(textSearchCommand);
@@ -212,7 +221,7 @@ namespace MongoDbGenericDao
             foundedRecords = commandResult.Response["stats"]["nfound"].AsInt64;
 
             return commandResult.Ok
-                ? commandResult.Results.OrderBy(t => t.score).Skip(pagesize * (page - 1)).Take(pagesize).Select(t => t.obj)
+                ? commandResult.Results.Skip(pagesize * (page - 1)).Take(pagesize).Select(x => x.obj)
                 : null;
         }
     }
