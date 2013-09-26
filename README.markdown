@@ -13,7 +13,7 @@
 - long Count(System.Linq.Expressions.Expression<Func<T, bool>> condition);
 - IEnumerable<T> Paginate<TKey>(System.Linq.Expressions.Expression<Func<T, bool>> condition, int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
 - IEnumerable<T> Paginate<TKey>(int pagesize, int page, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
-- IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords, params string[] indexes);
+- IEnumerable<T> Search(string field, string search, int page, int pagesize, out long foundedRecords);
 #Install nuget package
 ```
 PM> Install-Package MongoDB-GenericDao
@@ -81,5 +81,8 @@ bmessage.Delete(top50MessagesThatContainsHelloWordMessage.First());
 
 //paginate first page based in date created order by descending
 var last10 = bmessage.Paginate(1,10,x=>x.DateCreated,true);
+
+//search
+var user_by_domain_email = bmessage.Search("Email", "@email.com", 1, 10, out totalrecords);
 
 ```

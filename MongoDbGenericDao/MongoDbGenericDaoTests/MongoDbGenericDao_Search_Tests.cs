@@ -125,5 +125,16 @@ namespace MongoDbGenericDaoTests
 
             Assert.AreEqual(12, totalrecords);
         }
+
+        [Test]
+        [ExpectedException]
+        public void Search_Email_and_Name_BristolJudite_Exception_Test()
+        {
+            long totalrecords;
+            var results = IBUser.Search("Email,Name", "judite@email", 1, 10, out totalrecords);
+
+            Assert.AreEqual(12, totalrecords);
+        }
+
     }
 }
