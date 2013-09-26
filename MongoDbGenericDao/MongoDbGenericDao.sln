@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbGenericDao", "MongoDbGenericDao.csproj", "{39D841EF-74FA-4F3A-8CDF-2A3669FCF8F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbGenericDaoTests", "MongoDbGenericDaoTests\MongoDbGenericDaoTests.csproj", "{3F8FD9DF-55D6-4DFC-8FA8-C2A68229D145}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E63FE2A3-D6F5-4BE5-9E40-C44512603024}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		MongoDbGenericDao.vsmdi = MongoDbGenericDao.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MongoDbGenericDao.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -13,6 +25,10 @@ Global
 		{39D841EF-74FA-4F3A-8CDF-2A3669FCF8F1}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{39D841EF-74FA-4F3A-8CDF-2A3669FCF8F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39D841EF-74FA-4F3A-8CDF-2A3669FCF8F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8FD9DF-55D6-4DFC-8FA8-C2A68229D145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8FD9DF-55D6-4DFC-8FA8-C2A68229D145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8FD9DF-55D6-4DFC-8FA8-C2A68229D145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8FD9DF-55D6-4DFC-8FA8-C2A68229D145}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

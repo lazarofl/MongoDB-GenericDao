@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDbGenericDao.Search;
+using System.Text.RegularExpressions;
 
 namespace MongoDbGenericDao
 {
@@ -203,26 +204,14 @@ namespace MongoDbGenericDao
         /// <param name="limit">Limit size of results</param>
         /// <param name="foundedRecords">total number of founded records in index</param>
         /// <returns></returns>
-        public IEnumerable<T> Search(string search, int page, int pagesize, out long foundedRecords, params string[] indexes)
+        public IEnumerable<T> Search(string field, string search, int page, int pagesize, out long foundedRecords)
         {
-            if (indexes.Length > 0)
-                _repository.GetCollection<T>(_collectioname).EnsureIndex(indexes);
+            var query = Query.Matches(field, new BsonRegularExpression(search, "i"));
 
-            IMongoCommand textSearchCommand = new CommandDocument
-             {
-                 { "language", _language },
-                 { "search", search },
-                 { "text", _collectioname },
-                 { "limit", page * pagesize }
-             };
+            var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
-            var commandResult = _repository.RunCommandAs<TextSearchCommandResult<T>>(textSearchCommand);
-
-            foundedRecords = commandResult.Response["stats"]["nfound"].AsInt64;
-
-            return commandResult.Ok
-                ? commandResult.Results.Skip(pagesize * (page - 1)).Take(pagesize).Select(x => x.obj)
-                : null;
+            foundedRecords = totallist.Count;
+            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
         }
     }
 }
