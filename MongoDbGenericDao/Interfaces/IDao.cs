@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MongoDB.Driver;
 
 namespace MongoDbGenericDao.Interfaces
 {
@@ -77,6 +78,7 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="foundedRecords"></param>
         /// <returns></returns>
         IEnumerable<T> Search_And(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
+        IEnumerable<T> Search_And(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords);
         /// <summary>
         /// Seach using 'text' command based in key value pairs Or Clause
         /// </summary>
@@ -86,6 +88,7 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="foundedRecords"></param>
         /// <returns></returns>
         IEnumerable<T> Search_Or(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
+        IEnumerable<T> Search_Or(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords);
         /// <summary>
         /// Deletes the Entity.
         /// </summary>

@@ -2,6 +2,9 @@
 using MongoDbGenericDaoTests.Models;
 using NUnit.Framework;
 using System.Collections.Generic;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using MongoDB.Bson;
 
 namespace MongoDbGenericDaoTests
 {
@@ -23,18 +26,18 @@ namespace MongoDbGenericDaoTests
             foreach (var item in IBUser.GetAll())
                 IBUser.Delete(item);
 
-            IBUser.Save(new User { Name = "Mercia Rocky", Email = "merciarocky@email.com" });
-            IBUser.Save(new User { Name = "Herberto Marina", Email = "herbertomarina@email.com" });
-            IBUser.Save(new User { Name = "Vicky Peers", Email = "vickypeers@email.com" });
-            IBUser.Save(new User { Name = "Luanna Anjelica", Email = "luannaanjelica@email.com" });
-            IBUser.Save(new User { Name = "Luanna Serveros", Email = "luannaserveros@email.com" });
-            IBUser.Save(new User { Name = "Fernão Doroteia", Email = "fernãodoroteia@email.com" });
-            IBUser.Save(new User { Name = "Chica Ciríaco", Email = "chicaciríaco@email.com" });
-            IBUser.Save(new User { Name = "Bristol Judite", Email = "bristoljudite@email.com" });
-            IBUser.Save(new User { Name = "Tammie Duane", Email = "tammieduane@email.com" });
-            IBUser.Save(new User { Name = "Francisco Duda", Email = "franciscoduda@email.com" });
-            IBUser.Save(new User { Name = "Zita Jemmy", Email = "zitajemmy@email.com" });
-            IBUser.Save(new User { Name = "Charisma Cydney", Email = "charismacydney@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Mercia Rocky", Email = "merciarocky@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Herberto Marina", Email = "herbertomarina@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Vicky Peers", Email = "vickypeers@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Luanna Anjelica", Email = "luannaanjelica@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Luanna Serveros", Email = "luannaserveros@email.com" });
+            IBUser.Save(new User { Type = 1, Name = "Fernão Doroteia", Email = "fernãodoroteia@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Chica Ciríaco", Email = "chicaciríaco@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Bristol Judite", Email = "bristoljudite@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Tammie Duane", Email = "tammieduane@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Francisco Duda", Email = "franciscoduda@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Zita Jemmy", Email = "zitajemmy@email.com" });
+            IBUser.Save(new User { Type = 2, Name = "Charisma Cydney", Email = "charismacydney@email.com" });
         }
 
         [Test]
@@ -146,6 +149,21 @@ namespace MongoDbGenericDaoTests
             var search = new Dictionary<string, string>();
             search.Add("Name", "Mercia Rocky");
             search.Add("Email", "merciarocky@email.com");
+
+            var results = IBUser.Search_And(search, 1, 10, out totalrecords);
+
+            Assert.AreEqual(1, totalrecords);
+        }
+
+        [Test]
+        public void Search_And_Clause_WithMongoQueriesTest()
+        {
+            long totalrecords;
+
+            var search = new List<IMongoQuery>();
+            search.Add(Query.EQ("Type", new BsonInt32(1)));
+            search.Add(Query.Matches("Name", new BsonRegularExpression("Mercia Rocky", "i")));
+            search.Add(Query.Matches("Email", new BsonRegularExpression("merciarocky@email.com", "i")));
 
             var results = IBUser.Search_And(search, 1, 10, out totalrecords);
 
