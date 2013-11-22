@@ -213,5 +213,33 @@ namespace MongoDbGenericDao
             foundedRecords = totallist.Count;
             return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
         }
+
+        public IEnumerable<T> Search_And(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords)
+        {
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            foreach (var key in keys_and_values.Keys)
+                queries.Add(Query.Matches(key, new BsonRegularExpression(keys_and_values[key], "i")));
+
+            var query = Query.And(queries);
+
+            var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
+
+            foundedRecords = totallist.Count;
+            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+        }
+
+        public IEnumerable<T> Search_Or(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords)
+        {
+            List<IMongoQuery> queries = new List<IMongoQuery>();
+            foreach (var key in keys_and_values.Keys)
+                queries.Add(Query.Matches(key, new BsonRegularExpression(keys_and_values[key], "i")));
+
+            var query = Query.Or(queries);
+
+            var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
+
+            foundedRecords = totallist.Count;
+            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+        }
     }
 }

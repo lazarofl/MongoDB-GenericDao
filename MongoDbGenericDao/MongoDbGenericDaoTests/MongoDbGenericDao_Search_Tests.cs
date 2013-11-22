@@ -1,6 +1,7 @@
 ﻿using MongoDbGenericDaoTests.Business;
 using MongoDbGenericDaoTests.Models;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace MongoDbGenericDaoTests
 {
@@ -134,6 +135,35 @@ namespace MongoDbGenericDaoTests
             var results = IBUser.Search("Email,Name", "judite@email", 1, 10, out totalrecords);
 
             Assert.AreEqual(12, totalrecords);
+        }
+
+
+        [Test]
+        public void Search_And_Clause_Test()
+        {
+            long totalrecords;
+
+            var search = new Dictionary<string, string>();
+            search.Add("Name", "Mercia Rocky");
+            search.Add("Email", "merciarocky@email.com");
+
+            var results = IBUser.Search_And(search, 1, 10, out totalrecords);
+
+            Assert.AreEqual(1, totalrecords);
+        }
+
+        [Test]
+        public void Search_Or_Clause_Test()
+        {
+            long totalrecords;
+
+            var search = new Dictionary<string, string>();
+            search.Add("Name", "Bristol Judite");
+            search.Add("Email", "merciarocky@email.com");
+
+            var results = IBUser.Search_Or(search, 1, 10, out totalrecords);
+
+            Assert.AreEqual(2, totalrecords);
         }
 
     }

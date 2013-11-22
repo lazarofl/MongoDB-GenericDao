@@ -69,6 +69,24 @@ namespace MongoDbGenericDao.Interfaces
         /// <returns></returns>
         IEnumerable<T> Search(string field, string search, int page, int pagesize, out long foundedRecords);
         /// <summary>
+        /// Seach using 'text' command based in key value pairs And Clause
+        /// </summary>
+        /// <param name="keys_and_values"></param>
+        /// <param name="page"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="foundedRecords"></param>
+        /// <returns></returns>
+        IEnumerable<T> Search_And(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
+        /// <summary>
+        /// Seach using 'text' command based in key value pairs Or Clause
+        /// </summary>
+        /// <param name="keys_and_values"></param>
+        /// <param name="page"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="foundedRecords"></param>
+        /// <returns></returns>
+        IEnumerable<T> Search_Or(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
+        /// <summary>
         /// Deletes the Entity.
         /// </summary>
         /// <param name="pobject">The pobject.</param>
