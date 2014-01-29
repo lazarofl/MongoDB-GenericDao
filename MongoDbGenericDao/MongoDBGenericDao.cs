@@ -31,15 +31,6 @@ namespace MongoDbGenericDao
             _repository = server.GetDatabase(mongourl.DatabaseName);
         }
 
-        public MongoDBGenericDao(string pConnectionstring, string username, string password)
-        {
-            var conn = new MongoConnectionStringBuilder(pConnectionstring);
-            conn.Username = username;
-            conn.Password = password;
-
-            _repository = MongoServer.Create(conn).GetDatabase(conn.DatabaseName);
-        }
-
         /// <summary>
         /// Gets the by ID.
         /// </summary>
