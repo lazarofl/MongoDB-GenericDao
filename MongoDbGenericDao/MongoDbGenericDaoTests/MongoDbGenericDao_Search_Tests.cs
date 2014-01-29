@@ -11,13 +11,12 @@ namespace MongoDbGenericDaoTests
     [TestFixture]
     public class MongoDbGenericDao_Search_Tests
     {
-        private string mongodbserver = "server=192.168.1.15";
-        private string mongodbdatabase = "database=tests_mongodb";
+        private string mongodbserver = "mongodb://localhost/tests_mongodb";
         public IBUser IBUser = null;
 
         public MongoDbGenericDao_Search_Tests()
         {
-            IBUser = new BUser(string.Concat(mongodbserver, ";", mongodbdatabase));
+            IBUser = new BUser(mongodbserver);
         }
 
         [SetUp]
@@ -131,13 +130,12 @@ namespace MongoDbGenericDaoTests
         }
 
         [Test]
-        [ExpectedException]
-        public void Search_Email_and_Name_BristolJudite_Exception_Test()
+        public void Search_Email_and_Name_BristolJudite_Test()
         {
             long totalrecords;
             var results = IBUser.Search("Email,Name", "judite@email", 1, 10, out totalrecords);
 
-            Assert.AreEqual(12, totalrecords);
+            Assert.AreEqual(0, totalrecords);
         }
 
 
