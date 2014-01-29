@@ -24,8 +24,10 @@ namespace MongoDbGenericDao
         /// <param name="pConnectionstring">The connectionstring.</param>
         public MongoDBGenericDao(string pConnectionstring)
         {
-            var conn = new MongoConnectionStringBuilder(pConnectionstring);
-            _repository = MongoServer.Create(conn).GetDatabase(conn.DatabaseName);
+            MongoUrl mongourl = MongoUrl.Create(pConnectionstring);
+            MongoClient client = new MongoClient(mongourl);
+            MongoServer server = client.GetServer();
+            _repository = server.GetDatabase(mongourl.DatabaseName);
         }
 
         public MongoDBGenericDao(string pConnectionstring, string username, string password)
