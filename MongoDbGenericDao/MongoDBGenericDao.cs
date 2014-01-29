@@ -22,6 +22,7 @@ namespace MongoDbGenericDao
         /// Initializes a new instance of the <see cref="MongoDBGenericDao{T}" /> class.
         /// </summary>
         /// <param name="pConnectionstring">The connectionstring.</param>
+        /// <example>mongodb://localhost/database_name</example>
         public MongoDBGenericDao(string pConnectionstring)
         {
             MongoUrl mongourl = MongoUrl.Create(pConnectionstring);
