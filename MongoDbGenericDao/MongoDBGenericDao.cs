@@ -205,10 +205,11 @@ namespace MongoDbGenericDao
             var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
             foundedRecords = totallist.Count;
+
             return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
         }
 
-        public IEnumerable<T> Search_And(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords)
+        public IEnumerable<T> Search_And<Tkey>(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
             List<IMongoQuery> queries = new List<IMongoQuery>();
             foreach (var key in keys_and_values.Keys)
@@ -219,20 +220,38 @@ namespace MongoDbGenericDao
             var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
             foundedRecords = totallist.Count;
-            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+
+            if (pOrderByDescending)
+                totallist.OrderByDescending(x => x.Id);
+            else
+                totallist.OrderBy(x => x.Id);
+
+            if (pOrderByDescending)
+                return totallist.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return totallist.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
         }
 
-        public IEnumerable<T> Search_And(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords)
+        public IEnumerable<T> Search_And<Tkey>(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
             var query = Query.And(search);
 
             var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
             foundedRecords = totallist.Count;
-            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+
+            if (pOrderByDescending)
+                totallist.OrderByDescending(x => x.Id);
+            else
+                totallist.OrderBy(x => x.Id);
+
+            if (pOrderByDescending)
+                return totallist.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return totallist.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
         }
 
-        public IEnumerable<T> Search_Or(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords)
+        public IEnumerable<T> Search_Or<Tkey>(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
             List<IMongoQuery> queries = new List<IMongoQuery>();
             foreach (var key in keys_and_values.Keys)
@@ -243,17 +262,35 @@ namespace MongoDbGenericDao
             var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
             foundedRecords = totallist.Count;
-            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+
+            if (pOrderByDescending)
+                totallist.OrderByDescending(x => x.Id);
+            else
+                totallist.OrderBy(x => x.Id);
+
+            if (pOrderByDescending)
+                return totallist.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return totallist.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
         }
 
-        public IEnumerable<T> Search_Or(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords)
+        public IEnumerable<T> Search_Or<Tkey>(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords, Func<T, Tkey> pOrderByClause = null, bool pOrderByDescending = false)
         {
             var query = Query.Or(search);
 
             var totallist = _repository.GetCollection<T>(_collectioname).Find(query).ToList();
 
             foundedRecords = totallist.Count;
-            return totallist.Skip(pagesize * (page - 1)).Take(pagesize).ToList();
+
+            if (pOrderByDescending)
+                totallist.OrderByDescending(x => x.Id);
+            else
+                totallist.OrderBy(x => x.Id);
+
+            if (pOrderByDescending)
+                return totallist.OrderByDescending(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
+            else
+                return totallist.OrderBy(pOrderByClause).Skip(pagesize * (page - 1)).Take(pagesize);
         }
     }
 }

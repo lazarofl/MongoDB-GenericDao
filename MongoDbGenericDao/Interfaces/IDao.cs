@@ -77,8 +77,8 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="pagesize"></param>
         /// <param name="foundedRecords"></param>
         /// <returns></returns>
-        IEnumerable<T> Search_And(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
-        IEnumerable<T> Search_And(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords);
+        IEnumerable<T> Search_And<TKey>(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
+        IEnumerable<T> Search_And<TKey>(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
         /// <summary>
         /// Seach using 'text' command based in key value pairs Or Clause
         /// </summary>
@@ -87,8 +87,8 @@ namespace MongoDbGenericDao.Interfaces
         /// <param name="pagesize"></param>
         /// <param name="foundedRecords"></param>
         /// <returns></returns>
-        IEnumerable<T> Search_Or(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords);
-        IEnumerable<T> Search_Or(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords);
+        IEnumerable<T> Search_Or<TKey>(IDictionary<string, string> keys_and_values, int page, int pagesize, out long foundedRecords, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
+        IEnumerable<T> Search_Or<TKey>(IList<IMongoQuery> search, int page, int pagesize, out long foundedRecords, Func<T, TKey> pOrderByClause = null, bool pOrderByDescending = false);
         /// <summary>
         /// Deletes the Entity.
         /// </summary>
