@@ -11,7 +11,9 @@ namespace MongoDbGenericDaoTests
     [TestFixture]
     public class MongoDbGenericDao_Search_Tests
     {
-        private string mongodbserver = "mongodb://localhost/tests_mongodb";
+        //private string mongodbserver = "mongodb://localhost/tests_mongodb";
+        private string mongodbserver = "mongodb://admin:qB4EZRVw@SG-condomundo-4035.servers.mongodirector.com/admin";
+
         public IBUser IBUser = null;
 
         public MongoDbGenericDao_Search_Tests()
@@ -144,11 +146,11 @@ namespace MongoDbGenericDaoTests
         {
             long totalrecords;
 
-            var search = new Dictionary<string, string>();
+            IDictionary<string, string> search = new Dictionary<string, string>();
             search.Add("Name", "Mercia Rocky");
             search.Add("Email", "merciarocky@email.com");
 
-            var results = IBUser.Search_And(search, 1, 10, out totalrecords);
+            var results = IBUser.Search_And<User>(search, 1, 10, out totalrecords, null, false);
 
             Assert.AreEqual(1, totalrecords);
         }
@@ -163,7 +165,7 @@ namespace MongoDbGenericDaoTests
             search.Add(Query.Matches("Name", new BsonRegularExpression("Mercia Rocky", "i")));
             search.Add(Query.Matches("Email", new BsonRegularExpression("merciarocky@email.com", "i")));
 
-            var results = IBUser.Search_And(search, 1, 10, out totalrecords);
+            var results = IBUser.Search_And<User>(search, 1, 10, out totalrecords);
 
             Assert.AreEqual(1, totalrecords);
         }
@@ -177,7 +179,7 @@ namespace MongoDbGenericDaoTests
             search.Add("Name", "Bristol Judite");
             search.Add("Email", "merciarocky@email.com");
 
-            var results = IBUser.Search_Or(search, 1, 10, out totalrecords);
+            var results = IBUser.Search_Or<User>(search, 1, 10, out totalrecords);
 
             Assert.AreEqual(2, totalrecords);
         }
